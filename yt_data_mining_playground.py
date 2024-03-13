@@ -62,6 +62,7 @@ pd.set_option('display.max_colwidth', None)
 
 print(df_videoData.head())
 
+#we want to display the thumbnails and video metadata in an iframe. Really useful for trust & safety work
 from IPython.display import HTML
 
 df_videoData["iframe"] = '<iframe src="' + df_videoData["thumbnail"] + '" width="100%" height="100px"></iframe>'
