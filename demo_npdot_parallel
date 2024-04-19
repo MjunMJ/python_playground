@@ -9,18 +9,22 @@ fig.set_figwidth(15)
 #line A
 xlabels = np.linspace(1,10,10)
 ylabels = np.linspace(1,8,10)
-ax1.plot(xlabels,ylabels)
+ax1.plot(xlabels,ylabels, color='blue')
+ax1.text(3,3,'line A')
 
-#line B
+#line B (green)
 Bxlabels = np.linspace(1,15,10)
 Bylabels = np.linspace(1,8,10)
-ax2.plot(Bxlabels,Bylabels)
+ax2.text(3,3,'line B')
+ax2.plot(Bxlabels,Bylabels, color='green')
 
-#line C
+#line C (red)
 Cxlabels = np.linspace(1,25,10)
 Cylabels = np.linspace(0.5,8,10)
 ax1.plot(Cxlabels, Cylabels, color='red')
+ax1.text(3,0.8,'line C')
 ax2.plot(Cxlabels, Cylabels, color='red')
+ax2.text(3,0.8,'line C')
 
 #calculate the dot products
 dotAC=np.dot(Cxlabels,xlabels)
