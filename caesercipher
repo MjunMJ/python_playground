@@ -1,0 +1,21 @@
+#Caesar cipher
+#encrypts messages just by cyclicly shifting their letters
+
+letters = "abcdefghijklmnopqrstuvwxyz "
+dictionary = dict(zip(letters, range(len(letters)))) #use a dictionary so that the letter in cipher is the key
+
+def caesarEncrypt (key, message):
+  encrypted = ''
+  message = message.lower()
+  lenMessage = len(message)
+  n=0
+  while n<len(message):
+    letter = message[n]
+    getDictionaryPosition = dictionary[letter]
+    shift = (getDictionaryPosition +key)%len(letters) #add modulus function so that when the position is beyond the letter template, we move back to the front to get the encrypted letter
+    eLetter = letters[shift]
+    encrypted += eLetter
+    n+=1
+  return encrypted
+
+caesarEncrypt(10, "I hope I can do this")
