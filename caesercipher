@@ -18,4 +18,19 @@ def caesarEncrypt (key, message):
     n+=1
   return encrypted
 
-caesarEncrypt(10, "I hope I can do this")
+def caesarDecrypt (Key, eMessage):
+  decrypted = ""
+  eMessage = eMessage.lower()
+  n=0
+  while n<len(eMessage):
+    eLetter = eMessage[n]
+    findLetter = letters.index(eLetter)-Key
+    decrypted += letters[findLetter]
+    n+=1
+  return decrypted
+
+e = caesarEncrypt(10, "I hope I can do this")
+d = caesarDecrypt(10, "sjryzojsjmkxjnyjcrsb")
+
+print(e)
+print(d)
