@@ -1,5 +1,3 @@
-Find two missing numbers in an array
-
 #trying out the famous challenge of finding the two missing number in an array
 
 import math
