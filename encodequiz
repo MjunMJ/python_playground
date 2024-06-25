@@ -4,7 +4,7 @@
 hex1 = "1c0111001f010100061a024b53535009181c"
 hex2 = "686974207468652062756c6c277320657965"
 
-#convert to base16 integer
+#convert to integer
 hex1_int = int(hex1,16)
 hex2_int = int(hex2, 16)
 
