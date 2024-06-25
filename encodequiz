@@ -1,4 +1,5 @@
 #answer for https://cryptopals.com/sets/1/challenges/2
+# Write a function that takes two equal-length buffers and produces their XOR combination.
 
 hex1 = "1c0111001f010100061a024b53535009181c"
 hex2 = "686974207468652062756c6c277320657965"
