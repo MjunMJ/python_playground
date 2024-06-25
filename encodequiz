@@ -18,7 +18,17 @@ desired_length = max(len(bin1), len(bin2))
 bin1 = bin1.zfill(desired_length)
 bin2 = bin2.zfill(desired_length)
 
-#xor
+#xor method 1
+xor_1_2 = int(bin1,2)^int(bin2,2)
+print(xor_1_2)
+hex_xor_1_2 = format(xor_1_2,'x') #because output of xor_1_2 is integer
+print(hex_xor_1_2)
+
+#xor method 2
+#make both same length, append zeros to shorter one
+#check which is longer
+
+
 result = ""
 for i in range(len(bin1)):
     if bin1[i] == bin2[i]:
@@ -28,5 +38,5 @@ for i in range(len(bin1)):
 
 print(result)
 
-hex_xor = hex(int(result,2))[2:] #needs to be base 2
+hex_xor = hex(int(result,2))[2:] #needs to be base 2 
 print(hex_xor)
