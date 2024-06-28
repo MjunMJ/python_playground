@@ -1,186 +1,72 @@
-{
-  "nbformat": 4,
-  "nbformat_minor": 0,
-  "metadata": {
-    "colab": {
-      "provenance": [],
-      "authorship_tag": "ABX9TyMHND3nAnnF5VT3cnBMyui9"
-    },
-    "kernelspec": {
-      "name": "python3",
-      "display_name": "Python 3"
-    },
-    "language_info": {
-      "name": "python"
-    }
-  },
-  "cells": [
-    {
-      "cell_type": "code",
-      "source": [
-        "#answer for https://cryptopals.com/sets/1/challenges/3\n",
-        "#thanks for\n",
-        "\n",
-        "!pip install nltk"
-      ],
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "id": "8bOGycqThDLC",
-        "outputId": "905e2de2-34c2-41a7-dbb8-aaed01724b66"
-      },
-      "execution_count": 1,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stdout",
-          "text": [
-            "Requirement already satisfied: nltk in /usr/local/lib/python3.10/dist-packages (3.8.1)\n",
-            "Requirement already satisfied: click in /usr/local/lib/python3.10/dist-packages (from nltk) (8.1.7)\n",
-            "Requirement already satisfied: joblib in /usr/local/lib/python3.10/dist-packages (from nltk) (1.4.2)\n",
-            "Requirement already satisfied: regex>=2021.8.3 in /usr/local/lib/python3.10/dist-packages (from nltk) (2024.5.15)\n",
-            "Requirement already satisfied: tqdm in /usr/local/lib/python3.10/dist-packages (from nltk) (4.66.4)\n"
-          ]
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
-      "execution_count": 2,
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "id": "D-iz7abBg7KN",
-        "outputId": "3aecf765-2c61-4e64-87e9-1ba790b37f6f"
-      },
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stdout",
-          "text": [
-            "[(88, 0.7941176470588235), (89, 0.7941176470588235), (90, 0.7941176470588235), (92, 0.7941176470588235), (93, 0.7941176470588235), (94, 0.7941176470588235), (95, 0.7941176470588235), (97, 0.7941176470588235), (98, 0.7941176470588235), (99, 0.7941176470588235), (108, 0.7941176470588235), (111, 0.7941176470588235), (112, 0.7941176470588235), (114, 0.7941176470588235), (117, 0.7941176470588235), (120, 0.7941176470588235), (81, 0.7647058823529411), (82, 0.7647058823529411), (105, 0.7647058823529411), (106, 0.7647058823529411), (109, 0.7647058823529411), (110, 0.7647058823529411), (116, 0.7647058823529411), (122, 0.7647058823529411), (123, 0.7647058823529411), (124, 0.7647058823529411), (125, 0.7647058823529411), (126, 0.7647058823529411), (127, 0.7647058823529411), (80, 0.7352941176470589), (83, 0.7352941176470589), (84, 0.7352941176470589), (87, 0.7352941176470589), (91, 0.7352941176470589), (96, 0.7352941176470589), (100, 0.7352941176470589), (101, 0.7352941176470589), (102, 0.7352941176470589), (103, 0.7352941176470589), (104, 0.7352941176470589), (107, 0.7352941176470589), (113, 0.7352941176470589), (115, 0.7352941176470589), (121, 0.7352941176470589), (85, 0.7058823529411765), (86, 0.7058823529411765), (118, 0.7058823529411765), (67, 0.6764705882352942), (78, 0.6764705882352942), (64, 0.6470588235294118), (65, 0.6470588235294118), (68, 0.6470588235294118), (69, 0.6470588235294118), (70, 0.6470588235294118), (71, 0.6470588235294118), (79, 0.6470588235294118), (119, 0.6470588235294118), (66, 0.6176470588235294), (77, 0.5882352941176471), (73, 0.5294117647058824), (75, 0.5294117647058824), (76, 0.5294117647058824), (72, 0.47058823529411764), (74, 0.47058823529411764), (8, 0.20588235294117646), (9, 0.20588235294117646), (10, 0.20588235294117646), (11, 0.20588235294117646), (12, 0.20588235294117646), (13, 0.20588235294117646), (14, 0.20588235294117646), (15, 0.20588235294117646), (16, 0.20588235294117646), (17, 0.20588235294117646), (18, 0.20588235294117646), (19, 0.20588235294117646), (20, 0.20588235294117646), (21, 0.20588235294117646), (22, 0.20588235294117646), (23, 0.20588235294117646), (24, 0.20588235294117646), (25, 0.20588235294117646), (26, 0.20588235294117646), (27, 0.20588235294117646), (28, 0.20588235294117646), (29, 0.20588235294117646), (30, 0.20588235294117646), (31, 0.20588235294117646), (32, 0.20588235294117646), (33, 0.20588235294117646), (34, 0.20588235294117646), (35, 0.20588235294117646), (36, 0.20588235294117646), (37, 0.20588235294117646), (38, 0.20588235294117646), (39, 0.20588235294117646), (40, 0.20588235294117646), (41, 0.20588235294117646), (42, 0.20588235294117646), (43, 0.20588235294117646), (44, 0.20588235294117646), (45, 0.20588235294117646), (46, 0.20588235294117646), (47, 0.20588235294117646), (48, 0.20588235294117646), (49, 0.20588235294117646), (50, 0.20588235294117646), (51, 0.20588235294117646), (52, 0.20588235294117646), (53, 0.20588235294117646), (54, 0.20588235294117646), (55, 0.20588235294117646), (57, 0.20588235294117646), (58, 0.20588235294117646), (59, 0.20588235294117646), (60, 0.20588235294117646), (61, 0.20588235294117646), (62, 0.20588235294117646), (0, 0.17647058823529413), (1, 0.17647058823529413), (2, 0.17647058823529413), (63, 0.17647058823529413), (5, 0.029411764705882353), (6, 0.029411764705882353), (7, 0.029411764705882353), (56, 0.029411764705882353), (3, 0.0), (4, 0.0), (128, 0.0), (129, 0.0), (130, 0.0), (131, 0.0), (132, 0.0), (133, 0.0), (134, 0.0), (135, 0.0), (136, 0.0), (137, 0.0), (138, 0.0), (139, 0.0), (140, 0.0), (141, 0.0), (142, 0.0), (143, 0.0), (144, 0.0), (145, 0.0), (146, 0.0), (147, 0.0), (148, 0.0), (149, 0.0), (150, 0.0), (151, 0.0), (152, 0.0), (153, 0.0), (154, 0.0), (155, 0.0), (156, 0.0), (157, 0.0), (158, 0.0), (159, 0.0), (160, 0.0), (161, 0.0), (162, 0.0), (163, 0.0), (164, 0.0), (165, 0.0), (166, 0.0), (167, 0.0), (168, 0.0), (169, 0.0), (170, 0.0), (171, 0.0), (172, 0.0), (173, 0.0), (174, 0.0), (175, 0.0), (176, 0.0), (177, 0.0), (178, 0.0), (179, 0.0), (180, 0.0), (181, 0.0), (182, 0.0), (183, 0.0), (184, 0.0), (185, 0.0), (186, 0.0), (187, 0.0), (188, 0.0), (189, 0.0), (190, 0.0), (191, 0.0), (192, 0.0), (193, 0.0), (194, 0.0), (195, 0.0), (196, 0.0), (197, 0.0), (198, 0.0), (199, 0.0), (200, 0.0), (201, 0.0), (202, 0.0), (203, 0.0), (204, 0.0), (205, 0.0), (206, 0.0), (207, 0.0), (208, 0.0), (209, 0.0), (210, 0.0), (211, 0.0), (212, 0.0), (213, 0.0), (214, 0.0), (215, 0.0), (216, 0.0), (217, 0.0), (218, 0.0), (219, 0.0), (220, 0.0), (221, 0.0), (222, 0.0), (223, 0.0), (224, 0.0), (225, 0.0), (226, 0.0), (227, 0.0), (228, 0.0), (229, 0.0), (230, 0.0), (231, 0.0), (232, 0.0), (233, 0.0), (234, 0.0), (235, 0.0), (236, 0.0), (237, 0.0), (238, 0.0), (239, 0.0), (240, 0.0), (241, 0.0), (242, 0.0), (243, 0.0), (244, 0.0), (245, 0.0), (246, 0.0), (247, 0.0), (248, 0.0), (249, 0.0), (250, 0.0), (251, 0.0), (252, 0.0), (253, 0.0), (254, 0.0), (255, 0.0)]\n"
-          ]
-        }
-      ],
-      "source": [
-        "hex_qq =\"1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736\"\n",
-        "\n",
-        "bytes_ciphertext = bytes.fromhex(hex_qq)\n",
-        "\n",
-        "#conduct XOR\n",
-        "def xor(key, ciphertext):\n",
-        "  key_byte = bytes([key])\n",
-        "  keystream = key_byte*len(ciphertext)\n",
-        "  return ([x^y for (x,y) in zip(ciphertext, keystream)])\n",
-        "\n",
-        "#loop through all 256 iterations\n",
-        "dict_all_outputs = {}\n",
-        "\n",
-        "for i in range(256):\n",
-        "  decrypted = xor(i, bytes_ciphertext)\n",
-        "  len_decrypted = len(decrypted)\n",
-        "  count_is_alpha=0\n",
-        "  for j in decrypted:\n",
-        "    if (j >=65) and (j<=122): #a=65, Z=122\n",
-        "      count_is_alpha+=1\n",
-        "    else:continue\n",
-        "  score = count_is_alpha/len_decrypted\n",
-        "  dict_all_outputs[i] = score\n",
-        "\n",
-        "\n",
-        "print(sorted(dict_all_outputs.items(), key=lambda x: x[1], reverse=True))"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "# Download WordNet data (only needed once)\n",
-        "import nltk\n",
-        "from nltk.corpus import wordnet"
-      ],
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "id": "PDeUQd8mhHvH",
-        "outputId": "0080e93d-36b7-4bc1-9518-c64993eb622f"
-      },
-      "execution_count": 3,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stderr",
-          "text": [
-            "[nltk_data] Downloading package wordnet to /root/nltk_data...\n"
-          ]
-        },
-        {
-          "output_type": "execute_result",
-          "data": {
-            "text/plain": [
-              "True"
-            ]
-          },
-          "metadata": {},
-          "execution_count": 3
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "#filter out only text with high number of\n",
-        "dict_above_7 = {key: value for key, value in dict_all_outputs.items() if value >= 0.7}\n",
-        "\n",
-        "def check_if_readable_text(text):\n",
-        "    synset = wordnet.synsets(text)\n",
-        "    if len(synset) == 0:\n",
-        "      return False\n",
-        "    else:\n",
-        "      return True\n",
-        "\n",
-        "hex_qq =\"1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736\"\n",
-        "\n",
-        "bytes_ciphertext = bytes.fromhex(hex_qq)\n",
-        "\n",
-        "key_percentTrue = {}\n",
-        "\n",
-        "for key, value in dict_above_7.items():\n",
-        "  letter = bytes([key]).decode(\"ascii\")\n",
-        "  phrase = bytes(xor(key,bytes_ciphertext)).decode(\"ascii\").split()\n",
-        "  if len(phrase)==1:continue\n",
-        "  else:\n",
-        "    list_readability = [check_if_readable_text(w) for w in phrase]\n",
-        "    percent_True = list_readability.count(True)/len(phrase)\n",
-        "    key_percentTrue[key] = percent_True\n",
-        "\n",
-        "max_percentTrue =max(key_percentTrue.values())\n",
-        "\n",
-        "answer = [key for key in key_percentTrue if key_percentTrue[key] == max_percentTrue][0]\n",
-        "\n",
-        "print(bytes([answer]).decode(\"ascii\"))\n",
-        "print(bytes(xor(answer,bytes_ciphertext)).decode(\"ascii\"))"
-      ],
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "id": "-bH2L3u7hOBY",
-        "outputId": "54c76a94-1d89-44bc-e30b-48d503a9c99e"
-      },
-      "execution_count": 4,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stdout",
-          "text": [
-            "X\n",
-            "Cooking MC's like a pound of bacon\n"
-          ]
-        }
-      ]
-    }
-  ]
-}
+#answer for https://cryptopals.com/sets/1/challenges/3
+#thanks for 
+
+!pip install nltk
+
+hex_qq ="1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+
+bytes_ciphertext = bytes.fromhex(hex_qq)
+
+#conduct XOR
+def xor(key, ciphertext):
+  key_byte = bytes([key])
+  keystream = key_byte*len(ciphertext)
+  return ([x^y for (x,y) in zip(ciphertext, keystream)]) 
+
+#loop through all 256 iterations
+dict_all_outputs = {}
+
+for i in range(256):
+  decrypted = xor(i, bytes_ciphertext)
+  len_decrypted = len(decrypted)
+  count_is_alpha=0
+  for j in decrypted:
+    if (j >=65) and (j<=122): #a=65, Z=122
+      count_is_alpha+=1
+    else:continue
+  score = count_is_alpha/len_decrypted
+  dict_all_outputs[i] = score
+
+
+print(sorted(dict_all_outputs.items(), key=lambda x: x[1], reverse=True))
+
+# Download WordNet data (only needed once)
+import nltk
+from nltk.corpus import wordnet
+
+#filter out only text with high number of 
+dict_above_7 = {key: value for key, value in dict_all_outputs.items() if value >= 0.7}
+
+def check_if_readable_text(text):
+    synset = wordnet.synsets(text)
+    if len(synset) == 0:
+      return False
+    else:
+      return True
+
+hex_qq ="1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+
+bytes_ciphertext = bytes.fromhex(hex_qq)
+
+key_percentTrue = {}
+
+for key, value in dict_above_7.items():
+  letter = bytes([key]).decode("ascii")
+  phrase = bytes(xor(key,bytes_ciphertext)).decode("ascii").split()
+  if len(phrase)==1:continue
+  else:
+    list_readability = [check_if_readable_text(w) for w in phrase]
+    percent_True = list_readability.count(True)/len(phrase)
+    key_percentTrue[key] = percent_True
+
+max_percentTrue =max(key_percentTrue.values())
+
+answer = [key for key in key_percentTrue if key_percentTrue[key] == max_percentTrue][0]
+
+print(bytes([answer]).decode("ascii"))
+print(bytes(xor(answer,bytes_ciphertext)).decode("ascii"))
+
+'''
+answer=X
+ciphertext = Cooking MC's like a pound of bacon
+'''
